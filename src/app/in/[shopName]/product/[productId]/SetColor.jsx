@@ -11,7 +11,8 @@ const SetColor = ({variants, cartProduct, handleVariantSelect, disabled}) => {
                     return (
                         <div 
                             key={variant.id}
-                            onClick={!disabled ? (() => handleVariantSelect(variant)) : () => {console.log("---");
+                            // onClick={!disabled ? (() => handleVariantSelect(variant)) : () => {console.log("---");
+                            onClick={true ? (() => handleVariantSelect(variant)) : () => {console.log("---");
                             }}
                             className={`h-6 w-auto rounded-sm border-teal-300 flex items-center justify-center ${cartProduct.selectedVariant.id === variant.id ? 'border-[1.5px]' : 'border-none'}`}>
                             <div  className='h-6 w-auto pl-2 pr-2 rounded-sm border-[1.2px] border-slate-300 cursor-pointer'>{variant.name}</div>

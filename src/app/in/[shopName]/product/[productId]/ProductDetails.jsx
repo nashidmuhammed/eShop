@@ -8,36 +8,63 @@ import ProductImage from './ProductImage';
 import { useCart } from '@/hooks/useCart';
 import { MdCheckCircle } from 'react-icons/md'
 import { useRouter } from 'next/navigation';
+import { DotzBaseUrlV1 } from '@/utils/GlobalVariables';
 
 const ProductDetails = ({product, shopname}) => {
     // const shopname = 'nfoursquare';
+    const organizationDetails = JSON.parse(localStorage.getItem('organizationDetails'));
+
+    const [isVariant, setIsVariant] = useState(false)
   
     const {handleAddProductToCart, cartProducts} = useCart()
     const [isProductInCart, setIsProductInCart] = useState(false)
     const [cartProduct, setCartProduct] = useState({
         id: product.id,
         name: product.name,
+        product_code: product.product_code,
         description: product.description,
         category :product.category,
         brand: product.brand,
         selectedImg: {...product?.images[0]},
         selectedVariant: {...product?.variants[0]},
         qty: 1,
-        price: product.price
+        price: product.price,
+        test:"test"
     })
     const router = useRouter()
-    console.log("cartProducts====>",cartProducts);
+    console.log("cartProducts==1==>",cartProducts);
+    console.log("product==1==>",product);
+    console.log("cartProduct==1==>",cartProduct);
 
     useEffect(() => {
       setIsProductInCart(false)
     
       if(cartProducts){
-        const existingIndex = cartProducts.findIndex((item) => item.id === product.id)
+        const existingIndex = cartProducts.findIndex((item) => item.id === product.id && item.selectedVariant.id === cartProduct.selectedVariant.id)
         if(existingIndex > -1){
             setIsProductInCart(true)
         }
       }
-    }, [cartProducts])
+      const loadSettings = async () => {
+        try {
+          const response = (await fetch(`${DotzBaseUrlV1}/main/get_settings/${organizationDetails.id}/PRD`))
+          const data = await response.json();
+          console.log("dataaa===>",data);
+          
+          const enable_variant = data.data.find(item => item.name === 'enable_variant')
+          console.log("enableVariant===>",enable_variant);
+          console.log("enableVariant==value=>",enable_variant.value);
+          
+          setIsVariant(enable_variant.value === 'True' ? true : false)
+          
+          // dispatch(setSettings(settings));
+        } catch (error) {
+          console.error('Failed to load settings:', error);
+        }
+      };
+  
+      loadSettings();
+    }, [cartProducts,cartProduct])
     
     // const handleColorSelect = useCallback((value) => {
     //     setCartProduct((prev) => {
@@ -106,13 +133,15 @@ const ProductDetails = ({product, shopname}) => {
             </div>
             <div className={product.inStock ? 'text-teal-400' : 'text-rose-400'}>{product.inStock ? 'In stock' : 'Out of stock'}</div>
             <Horizontal />
-            <SetColor
-                    cartProduct={cartProduct}
-                    // images={product.images}
-                    variants={product.variants}
-                    handleVariantSelect={handleVariantSelect}
-                    disabled={isProductInCart}
-                />
+            {isVariant &&
+                <SetColor
+                        cartProduct={cartProduct}
+                        // images={product.images}
+                        variants={product.variants}
+                        handleVariantSelect={handleVariantSelect}
+                        disabled={isProductInCart}
+                    />
+            }
             <Horizontal />
             <SetQty
                 cartProduct={cartProduct}

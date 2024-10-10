@@ -13,6 +13,8 @@ import { Toaster } from "react-hot-toast";
 // import AuthProvider from "@/providers/AuthProvider";
 import LayoutProvider from "@/providers/LayoutProvider";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { Provider } from "react-redux";
+import store from '../redux/store';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,6 +42,7 @@ export default function RootLayout({ children }) {
             },
           },
         }} />
+          {/* <Provider store={store}> */}
         <AntdRegistry >
           <AuthProvider >
           
@@ -58,6 +61,7 @@ export default function RootLayout({ children }) {
             </LayoutProvider>
           </AuthProvider>
         </AntdRegistry>
+            {/* </Provider> */}
 
       </body>
     </html>

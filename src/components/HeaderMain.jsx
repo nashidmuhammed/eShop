@@ -7,8 +7,14 @@ import { useCart } from '@/hooks/useCart'
 import toast from 'react-hot-toast';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AutoSearch from './AutoSearch';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSettings } from '../redux/settingsSlice';
+import { DotzBaseUrlV1 } from '@/utils/GlobalVariables';
+import { useEffect, useState } from 'react';
 
 const HeaderMain = ({setLoader}) => {
+  // const dispatch = useDispatch();
+  // const { theme, language, notificationsEnabled } = useSelector((state) => state.settings);
   const organizationDetails = JSON.parse(localStorage.getItem('organizationDetails'));
   const shopname = organizationDetails.name
   const router = useRouter();
@@ -25,6 +31,7 @@ const HeaderMain = ({setLoader}) => {
     setLoader(true)
     router.push(`/in/${organizationDetails.shopname}/cart`)
   };
+
 
   return (
     <div className='border-b border-gray-200 py-6'>

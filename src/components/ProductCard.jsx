@@ -103,7 +103,7 @@ const ProductCard = ({img, title, desc, rating, price, id, setLoader}) => {
   
   return (
     <div  className="w-60 p-2 bg-white rounded-xl transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover:shadow-2xl mt-4 mb-4 lg:mt-0">
-            <img src={img && baseUrl+img} alt={title} className="h-full object-cover rounded-xl w-full" />
+            <img src={img ? baseUrl+img : '/box.png'} alt={title} className="h-full object-cover rounded-xl w-full" />
             <div className="p-2">
                 <h2 className="font-bold text-lg mb-2">{title}</h2>
                 <span className="text-xl font-semibold">Rs. {price}.00</span>
